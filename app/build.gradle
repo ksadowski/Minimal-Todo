@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     signingConfigs {
@@ -11,13 +13,15 @@ android {
         }
     }
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.avjindersinghsekhon.minimaltodo"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 3
         versionName "1.2"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -25,7 +29,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] }
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
     lintOptions {
         abortOnError false
     }
@@ -43,4 +49,18 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:support-v13:23.1.0'
+    compile 'com.forkingcode.espresso.contrib:espresso-descendant-actions:1.1.1'
+
+
+    androidTestCompile 'com.android.support:support-v13:23.1.0'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.1'
+    androidTestCompile 'com.android.support:recyclerview-v7:23.1.0'
+    androidTestCompile 'com.forkingcode.espresso.contrib:espresso-descendant-actions:1.1.1'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
