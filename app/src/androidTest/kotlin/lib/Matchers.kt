@@ -1,10 +1,8 @@
 package lib
 
 import android.app.Activity
-import android.content.Context
 import android.support.annotation.IdRes
 import android.support.annotation.StringRes
-import android.support.test.InstrumentationRegistry
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
@@ -12,8 +10,6 @@ import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.espresso.contrib.RecyclerViewActions.*
-import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import android.support.test.runner.lifecycle.Stage
 import android.support.v7.widget.RecyclerView
 import com.forkingcode.espresso.contrib.DescendantViewActions
 import android.view.View
@@ -23,20 +19,10 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 import org.hamcrest.TypeSafeMatcher
-import android.content.pm.PackageManager
-import android.content.pm.PackageInfo
-import android.util.TypedValue
-import android.content.pm.ActivityInfo
-import android.graphics.drawable.ColorDrawable
-import android.support.test.espresso.intent.Checks
-import android.support.test.espresso.matcher.BoundedMatcher
+import android.support.design.widget.TextInputLayout
 import android.support.test.espresso.matcher.RootMatchers
-import android.util.Log
-import android.view.ContextThemeWrapper
 import android.widget.EditText
 import org.hamcrest.CoreMatchers
-import java.lang.reflect.AccessibleObject.setAccessible
-import java.lang.reflect.InvocationTargetException
 
 
 /**
@@ -56,6 +42,30 @@ class Matchers {
                 val parent = view.parent
                 return parent is ViewGroup && parentMatcher.matches(parent)
                         && view == parent.getChildAt(position)
+            }
+        }
+    }
+
+    fun hasTextInputLayoutErrorText(expectedErrorText: String): Matcher<View> {
+
+        return object : TypeSafeMatcher<View>() {
+
+            override fun matchesSafely(view: View) : Boolean {
+                if (!(view is EditText)) {
+                    return false;
+                }
+
+                val error = (view as EditText).getError();
+
+                if (error == null) {
+                    return false;
+                }
+
+                val hint = error.toString();
+                return expectedErrorText.equals(hint);
+            }
+
+            override fun describeTo(description: Description) {
             }
         }
     }
@@ -80,7 +90,7 @@ class Matchers {
         onView(allOf(withId(viewId), isDisplayed())).check(matches(withText(stringRes)))
     }
 
-    fun taskAtPositionContainsDate(@IdRes recyclerViewId: Int, position: Int, date: String, @IdRes dependantViewId: Int = R.id.todoListItemTimeTextView){
+    fun taskAtPositionContainsDate(@IdRes recyclerViewId: Int, position: Int, date: String, @IdRes dependantViewId: Int = R.id.todoListItemTimeTextView) {
         onView(withId(recyclerViewId)).perform(
                 actionOnItemAtPosition<RecyclerView.ViewHolder>(position-1,
                         DescendantViewActions.checkDescendantViewAction(
@@ -88,7 +98,7 @@ class Matchers {
         )
     }
 
-    fun taskAtPositionContainsName(@IdRes recyclerViewId: Int, position: Int, name: String, @IdRes dependantViewId: Int = R.id.toDoListItemTextview){
+    fun taskAtPositionContainsName(@IdRes recyclerViewId: Int, position: Int, name: String, @IdRes dependantViewId: Int = R.id.toDoListItemTextview) {
         onView(withId(recyclerViewId)).perform(
                 actionOnItemAtPosition<RecyclerView.ViewHolder>(position-1,
                         DescendantViewActions.checkDescendantViewAction(
@@ -96,12 +106,18 @@ class Matchers {
         )
     }
 
-    fun assertRecyclerViewItemsCount(@IdRes recyclerViewId: Int, expectedValue: Int){
+    fun assertRecyclerViewItemsCount(@IdRes recyclerViewId: Int, expectedValue: Int) {
         onView(withId(recyclerViewId)).check(RecyclerViewItemCountAssertion(expectedValue))
     }
 
-    fun assertToastWithTextFromStringResourceOnActivity(text: String, activity: Activity){
+    fun assertToastWithTextFromStringResourceOnActivity(text: String, activity: Activity) {
         onView(withText(text)).inRoot(RootMatchers.withDecorView(CoreMatchers.not((activity.getWindow().getDecorView())))).check(matches(isDisplayed()))
     }
+
+    fun assertErrorTextOnViewWithId(@IdRes viewId: Int, expectedString: String) {
+        onView(allOf(withId(viewId), isDisplayed())).check(matches(hasTextInputLayoutErrorText(expectedString)))
+    }
+
+
 
 }

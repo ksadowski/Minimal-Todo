@@ -24,8 +24,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
-
-
 /**
  * Created by ksadowski on 06.09.2017.
  */

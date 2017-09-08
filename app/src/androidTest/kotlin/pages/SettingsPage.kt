@@ -13,11 +13,10 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import android.support.test.runner.lifecycle.Stage
 
-
-
 /**
  * Created by ksadowski on 06.09.2017.
  */
+
 class SettingsPage {
 
     val settingsMenuItemId = R.id.title

@@ -22,31 +22,36 @@ class TaskPage {
     val rustyMachineToastText = "My time-machine is a bit rusty"
     val timeInPastResourceId = R.string.date_error_check_again
 
-    fun clickCloseButton(){
+    fun clickCloseButton() {
         e.clickOnVisibleElementWithParentIdAndContentDescription(toolbarId,"Navigate up")
     }
 
-    fun clickSubmitTaskButton(){
+    fun clickSubmitTaskButton() {
         e.clickOnVisibleViewWithId(saveTaskButtonId)
     }
 
-    fun enterTaskName(text: String){
+    fun enterTaskName(text: String) {
         e.typeTextInVisibleViewWithTextAndId(text, taskNameEditTextId)
     }
 
-    fun clickReminderSwitch(){
+    fun editTaskName(text: String) {
+        e.clearViewWithId(taskNameEditTextId)
+        e.typeTextInVisibleViewWithTextAndId(text, taskNameEditTextId)
+    }
+
+    fun clickReminderSwitch() {
         e.clickOnVisibleViewWithId(remindMeSwitchId)
     }
 
-    fun clickDatePicker(){
+    fun clickDatePicker() {
         e.clickOnVisibleViewWithId(dateEditTextId)
     }
 
-    fun clickTimePicker(){
+    fun clickTimePicker() {
         e.clickOnVisibleViewWithId(timeEditTextId)
     }
 
-    fun setValuesForTaskWithReminder(text: String, year: Int, month: Int, day: Int, hh: Int, mm: Int){
+    fun setValuesForTaskWithReminder(text: String, year: Int, month: Int, day: Int, hh: Int, mm: Int) {
         enterTaskName(text)
         clickReminderSwitch()
         clickDatePicker()
